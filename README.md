@@ -79,7 +79,11 @@ node v20.12.2
 
 tailwindcss v3.4.16
 
-Windows 11:
-        Major  Minor  Build  Revision
-        -----  -----  -----  --------
-        10     0      21996  0
+Editor:
+    VSCode 1.96.2 x64
+
+Operating system:
+    Windows 11:
+        Major version: 10
+        Minor version: 0
+        Build: 21996 
