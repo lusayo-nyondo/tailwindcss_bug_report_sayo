@@ -46,24 +46,40 @@ I have recreated a demonstration of the bug in this repo.
 - Clone this repository
 - Navigate to `tailwind_(lab)`
 - Run `npm install`
-- Run `npx tailwindcss -i ./src/input.css -o ./src/output.css --watch`
+- Run `npm run dev`
 - Open the `templates/index.html` file in your browser to view how it renders. It's just a centered div with `bg-slate-700`.
 - Modify the background color of the div to `bg-blue-700` and save.
-- Refresh the browser to see the change.
-- Done.
+- Refresh the browser to see if it's changed.
+- You'll note it hasn't changed because the hot-reload feature isn't working.
+- You can also repeat these steps for the folders:
+    - `tailwind_[lab]`
+    - `tailwind_{lab}`
 
-For me, following the steps above, it doesn't work.
+- If you try the above process on the folder `tailwind_lab`, it'll work just fine.
 
 ## Solution
-Renaming the parent folder of the project to not have parenthesis.
+1. Renaming the parent folder of the project to not have parenthesis.
+
+2. EDIT: I've managed to find some code within `tailwindcss/lib/cli/build/watching.js`
+that fixes this issue.
+
+It seems to be a problem with the package `chokidar` that tailwindcss uses for its
+debugging.
+
+Essentially, when the watcher is watching from a directory that has the above characters
+(i.e "[", "]", "(", ")", "{", or "}"), it does not properly fire an `on("change")` event.
+However, it does fire an `on("raw")` event with an evt type of `change`, so I've modified
+the source code such that instead of running rebuilds within the `on("change")` event handler,
+it triggers `on("change")`-based rebuilds within the `on("raw")` event handler and checks if
+the event type has a type of `change`.
 
 ## My Environment:
 
 node v20.12.2
 
-tailwindcss v3.4.13
+tailwindcss v3.4.16
 
-windows 11:
+Windows 11:
         Major  Minor  Build  Revision
         -----  -----  -----  --------
         10     0      21996  0
