@@ -64,7 +64,7 @@ I have recreated a demonstration of the bug in this repo.
 that fixes this issue.
 
 It seems to be a problem with the package `chokidar` that tailwindcss uses for its
-debugging.
+file system events.
 
 Essentially, when the watcher is watching from a directory that has the above characters
 (i.e "[", "]", "(", ")", "{", or "}"), it does not properly fire an `on("change")` event.
